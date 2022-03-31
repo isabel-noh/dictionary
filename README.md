@@ -1,4 +1,4 @@
-# //데이터 추가 삭제 및 수정하여 firebase로 연결하는 것은 아직 하지 못하였습니다. 
+# //데이터 추가 삭제 및 수정하여 firebase로 연결하는 것은 아직 하지 못하였습니다. 현재 진행중이고 ip 연결하게 되면 ip 주소를 readme.md에 업데이트 하겠습니다. 
 
 ## Getting Started with Create React App
 
