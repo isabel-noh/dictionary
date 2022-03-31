@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# //데이터 추가 삭제 및 수정하여 firebase로 연결하는 것은 아직 하지 못하였습니다. 
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
