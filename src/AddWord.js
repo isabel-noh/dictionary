@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addWord } from "./redux/modules/dictionary";
+import { addWordFB } from "./redux/modules/dictionary";
 import { useRef } from "react";
 import Button from '@material-ui/core/Button';
 import { collection, doc, getDoc, getDocs, addDoc} from 'firebase/firestore'
@@ -19,8 +19,6 @@ const AddWord = (props) => {
     // const addWord = () => {
     //     //firebase에 추가하기
     //     // addDoc(collection(db, "dictionary"), {word: "fiancé", desc: "약혼자", example: "le fiancé de Isabel", done: false})
-    
-        
     // }
 
     return (
@@ -33,7 +31,7 @@ const AddWord = (props) => {
                             <p>DESCRIPTION <Input required placeholder="설명" ref={desc}/></p>
                             <p>EXAMPLE <Input placeholder="예문" ref={example}/></p>
                     </AddDetail>
-                    <Button onClick={() => {dispatch(addWord(word.current.value, desc.current.value, example.current.value));history.push("/")}} 
+                    <Button onClick={() => {dispatch(addWordFB(word.current.value, desc.current.value, example.current.value));history.push("/")}} 
                             variant="outlined"
                             style={{margin: "20px auto 5px auto", display: "block", border: "1px solid rgb(25, 118, 210)"}}>Add</Button>
                 </AddWrap>

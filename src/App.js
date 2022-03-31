@@ -12,9 +12,10 @@ function App() {
   const history= useHistory();
 
   const dispatch = useDispatch();
-  // React.useEffect = (() => {
-  //   dispatch(loadDictFB());
-  // }, []);
+
+  React.useEffect(() => { 
+    dispatch(loadDictFB()); 
+  }, []);
 
 
   return (

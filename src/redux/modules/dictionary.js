@@ -11,9 +11,9 @@ const DONE = "dictionary/DONE";
 //Initial State 
 const initialState = {
     list: [
-        {word: 'word', desc: '말, 단어, 이야기', example: 'sentence is made of several words', done: false},
-        {word: 'sentence', desc: '문장, 징역을 살다', example: 'the judge sentenced him to a fine of $50 and time served', done: false},
-    ]
+        {word: 'word', desc: '말, 단어, 이야기', example: 'sentence is made of several words', done: false},],
+        // {word: 'sentence', desc: '문장, 징역을 살다', example: 'the judge sentenced him to a fine of $50 and time served', done: false}
+    
 };
 
 //Action Creaters
@@ -29,15 +29,28 @@ export function deleteWord(index){
 export function doneWord(index){
     return {type:DONE, index};
 }
-// export function editWord(word, desc, example, index){
-//     return {type: EDIT, word, desc, example, index};
+// export function editWord(word){
+//     return {type: EDIT, word};
 // }
 
 //MiddelWares
 export const loadDictFB = () => {
     return async function (dispatch) { // Firebase는 비동기통신으로 정보를 주기 때문에 async 붙여줌
         const dictionary_data = await getDocs(collection(db, "dictionary"));
-        console.log(dictionary_data);  // 여기에서 아무것도 안찍힘
+
+        let dict_list = [];
+        // console.log(dictionary_data.data());
+        dictionary_data.forEach((x) => {
+            dict_list.push({id: x.id, ...x.data()});
+            console.log(dict_list);
+        }) 
+        dispatch(loadWord(dict_list));
+    }
+}
+export const addWordFB = (word) => {
+    return async function (dispatch){
+        const docRef = await addDoc(collection(db, "dictionary"), word);
+        console.log((await getDoc(docRef)).data(), docRef.id);
     }
 }
 
@@ -45,10 +58,9 @@ export const loadDictFB = () => {
 //Reducer
 export default function reducer(state = initialState, action = {} ){
     switch (action.type) {
-        // case "dictionary/LOAD" : {
-        //     console.log("heeha");
-        //     return {list:initialState}
-        // }
+        case "dictionary/LOAD" : {
+            return {list:action.dictionary_list};//
+        }
         case "dictionary/ADD": {
             const new_word = {word: action.word, desc: action.desc, example: action.example, done: false}
             const new_word_list = [...state.list, new_word];
@@ -73,14 +85,14 @@ export default function reducer(state = initialState, action = {} ){
             return {list: new_word_list};
         }
         //단어장 수정
-        // case "dictionary/EDIT": {
-        //     const new_word_list = state.list.filter((l, idx) => {
-        //         return parseInt(action.index) !== idx;
-        //     })
-        //     const edit_word = {word: action.word, desc: action.desc, example: action.example, done: false}
-        //     const edit_word_list = [new_word_list, edit_word];
-        //     return {list: edit_word_list};
-        // }
+        case "dictionary/EDIT": {
+            const new_word_list = state.list.filter((l, idx) => {
+                return parseInt(action.index) !== idx;
+            })//배열을 spread...
+            const edit_word = {word: action.word, desc: action.desc, example: action.example, done: false}
+            const edit_word_list = [...new_word_list, edit_word];
+            return {list: edit_word_list};
+        }
         default:  return state;
     }
 }

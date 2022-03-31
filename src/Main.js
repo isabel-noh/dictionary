@@ -1,24 +1,22 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useSelector, useDispatch }from 'react-redux';
 import { deleteWord,doneWord } from "./redux/modules/dictionary";
 import { useEffect } from "react";
-import { db } from "./firebase";
-import { collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc } from 'firebase/firestore'
 import { loadDictFB } from "./redux/modules/dictionary";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CheckIcon from '@mui/icons-material/Check';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-const Main = (props) => {
+const Main = () => {
     const history = useHistory();
-
-    //store에서 정보 불러오기
-    const dictionary_list = useSelector((state) => state.dictionary.list);
     
     const dispatch = useDispatch();
+    //store에서 정보 불러오기
+    const dictionary_list = useSelector((state) => state.dictionary.list);
+
 
     // useEffect(async()=>{  // async 비동기 await : 기다렸다가 나오면 값 줘~ 
     //     console.log(db);
@@ -41,25 +39,28 @@ const Main = (props) => {
         <Wrap>
             <DictWrap>
                 <div className="CardWrap">
-                    {dictionary_list.map((l, idx)=>{
+                    {dictionary_list.map((word, idx) => {
                         return(
-                            <Card key={idx} done={l.done}>
+                            <Card key={idx} done={word.done}>
                                 <div className="buttonBox" style={{float:"right"}}>
                                     <Buttons onClick={() => {dispatch(doneWord(idx));}}><CheckIcon/></Buttons>
-                                    <Buttons onClick={() => history.push("/editword/"+l.word)} state={l.word}><EditIcon /></Buttons>  {/*버튼>state를 props로 보내줘야돼 */}
+                                    {/* 버튼>state를 props로 보내줘야돼 */}
+                                    {/*query parameeter */}
+                                    {/*find index */}
+                                    <Buttons onClick={() => history.push("/editword/"+word.id)}><EditIcon /></Buttons>  
                                     <Buttons onClick={() => {dispatch(deleteWord(idx))}}><DeleteForeverIcon /></Buttons>
                                 </div>
                                 <div className="WordWrap">
                                     <InnerTitle>단어</InnerTitle>
-                                    <p><b>{l.word}</b></p>
+                                    <p><b>{word.word}</b></p>
                                 </div>
                                 <div className="ExplaneWrap">
                                     <InnerTitle>설명</InnerTitle>
-                                    <p>{l.desc}</p>
+                                    <p>{word.desc}</p>
                                 </div>
                                 <div className="ExampleWrap">
                                     <InnerTitle>예시</InnerTitle>
-                                    <Example>{l.example}</Example>
+                                    <Example>{word.example}</Example>
                                 </div>
                             </Card>
                         )
@@ -75,7 +76,7 @@ const Main = (props) => {
 const Wrap = styled.div`
     background-color: #0492C2;
     width: 100vw;
-    height: 100%;
+    height: 100vh;
     padding: 30px 0px;
 `
 const DictWrap = styled.div`

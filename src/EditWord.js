@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import { editWord } from "./redux/modules/dictionary";
 import Button from '@material-ui/core/Button';
 import { db } from "./firebase";
@@ -13,28 +13,32 @@ import { useParams } from "react-router-dom";
 const EditWord = (props) => {
     //props로 받은 데이터에서 뭘 수정할 건지.
     const history = useHistory();
-    console.log(props); // {}아무것두 없음
 
     const params = useParams();
-    console.log(params.word);  //단어칸에서 edit 찍으면 해당 단어 edit페이지로 넘어오는거야
+    
+    const dictionary_list = useSelector((state) => state.dictionary.list);
 
-    useEffect(async()=>{  // async 비동기 await : 기다렸다가 나오면 값 줘~ 
-        console.log(db);
-        // firebase db 불러오기
-        const query = await getDocs(collection(db, "dictionary"));
-        query.forEach((doc) =>
-            console.log(doc.id, doc.data())
-        )                                       //firestore에서 redux로 데이터 가져온 다음 여기서 불러서 뷰에 보여주기
-
-        const docRef = doc(db, "dictionary", "dR2jtENkATWXG6TWZ2KO"); // (firebase, "collection", "collectionID")
-         //firebase에 업데이트하기
-        // updateDoc(docRef, {done: true});
+    // useEffect(async()=>{  // async 비동기 await : 기다렸다가 나오면 값 줘~ 
         
-    }, [])
+    //     // firebase db 불러오기
+    //     // const query = await getDocs(collection(db, "dictionary"));
+    //     // query.forEach((doc) =>
+    //     //     console.log(doc.id, doc.data())
+    //     // )                                       //firestore에서 redux로 데이터 가져온 다음 여기서 불러서 뷰에 보여주기
 
+    //     // const docRef = doc(db, "dictionary", "dR2jtENkATWXG6TWZ2KO"); // (firebase, "collection", "collectionID")
+    //      //firebase에 업데이트하기
+    //     // updateDoc(docRef, {done: true});
+        
+    // }, [])
 
-
-    const word = useRef(params.word);
+    console.log(dictionary_list);
+    dictionary_list.map((x, index) => {
+        if( dictionary_list.id === params){
+            return x;
+        }
+    }) 
+    const word = useRef(null);
     const desc = useRef(null);
     const example = useRef(null);
 
@@ -48,9 +52,9 @@ const EditWord = (props) => {
                     <h3>단어 수정하기</h3>
                     <AddDetail>
                         <form>
-                            <p>WORD <Input required placeholder="단어" ref={word} value={params.word} onChange={() => {console.log(word.current.value)}}/></p> {/* props.word */}
-                            <p>DESCRIPTION <Input required placeholder="설명" ref={desc}/></p>   {/* props.desc */}
-                            <p>EXAMPLE <Input placeholder="예문" ref={example}/></p>  {/* props.example */}
+                            <p>WORD <Input required placeholder="단어" ref={word} value="sdf" onChange={() => {console.log(word.current.value)}}/></p> {/* props.word */}
+                            <p>DESCRIPTION <Input required placeholder="설명" value="ddf" ref={desc}/></p>   {/* props.desc */}
+                            <p>EXAMPLE <Input placeholder="예문" ref={example} value="df"/></p>  {/* props.example */}
                         </form>
                     </AddDetail>
                     <Button onClick={() => { history.push("/")}} 
