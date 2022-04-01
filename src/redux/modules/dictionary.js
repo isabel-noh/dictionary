@@ -47,8 +47,11 @@ export const loadDictFB = () => {
             dict_list.push({id: x.id, ...x.data()});
         }) 
         dispatch(loadWord(dict_list));
+
     };
 };
+//데이터 추가 삭제 및 수정하여 firebase로 연결하는 것은 아직 하지 못하였습니다. 
+
 export const addWordFB = (word) => {
     return async function (dispatch) {
         const docRef = await addDoc(collection(db, "dictionary"), word);
