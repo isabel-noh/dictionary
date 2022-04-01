@@ -1,5 +1,4 @@
-# //데이터 추가  firebase로 연결하는 것은 아직 하지 못하였습니다. 현재 진행중이고 ip 연결하게 되면 ip 주소를 readme.md에 업데이트 하겠습니다. 
-
+# 전부 기능 완료 하였습니다. IP주소: http://isabel-noh.shop.s3-website.ap-northeast-2.amazonaws.com/ 
 ## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
