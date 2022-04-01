@@ -17,12 +17,14 @@ const AddWord = (props) => {
     const addWord = () => {
         //firebase에 추가하기
         // addDoc(collection(db, "dictionary"), {word: "fiancé", desc: "약혼자", example: "le fiancé de Isabel", done: false})
-        dispatch(addWordFB({
-            word: word.current.value,
-            desc: desc.current.value,
-            example: example.current.valeu,
-            done: false,
-        }));
+        dispatch(
+            addWordFB({
+                word: word.current.value,
+                desc: desc.current.value,
+                example: example.current.valeu,
+                done: false,
+            })
+        );
         history.goBack();
     }
 

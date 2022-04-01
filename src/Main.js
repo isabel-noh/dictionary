@@ -26,21 +26,6 @@ const Main = () => {
     const undoWord = (idx) => {
         dispatch(undoWordFB(dictionary_list[idx].id));
     }
-    // useEffect(async()=>{  // async 비동기 await : 기다렸다가 나오면 값 줘~ 
-    //     console.log(db);
-    //     // firebase db 불러오기
-    //     const query = await getDocs(collection(db, "dictionary"));
-    //     query.forEach((doc) =>
-    //         console.log(doc.id, doc.data())
-    //     )                                       //firestore에서 redux로 데이터 가져온 다음 여기서 불러서 뷰에 보여주기
-
-    //     const docRef = doc(db, "dictionary", "dR2jtENkATWXG6TWZ2KO"); // (firebase, "collection", "collectionID")
-    //      //firebase에 업데이트하기
-    //     // updateDoc(docRef, {done: true});
-        
-    //     //firebase에서 삭제하기
-    //     //deleteDoc(docRef);
-    // }, [])
 
     //DOM으로 올라갈 요소 return
     return(
@@ -53,9 +38,9 @@ const Main = () => {
                                 <div className="buttonBox" style={{float:"right"}}>
                                     <Buttons onClick={() => word.done === false ? doneWord(idx) : undoWord(idx)}><CheckIcon/></Buttons>
                                     {/* 버튼>state를 props로 보내줘야돼 */}
-                                    {/*query parameeter */}
+                                    {/*query parameter */}
                                     {/*find index */}
-                                    <Buttons onClick={() => history.push("/editword/"+word.id)}><EditIcon /></Buttons>  
+                                    <Buttons onClick={() => history.push("/editword/"+idx)}><EditIcon /></Buttons>  
                                     <Buttons onClick={() => deleteWord(idx)}><DeleteForeverIcon /></Buttons>
                                 </div>
                                 <div className="WordWrap">
@@ -80,6 +65,21 @@ const Main = () => {
         </Wrap>
     )
 }
+    // useEffect(async()=>{  // async 비동기 await : 기다렸다가 나오면 값 줘~ 
+    //     console.log(db);
+    //     // firebase db 불러오기
+    //     const query = await getDocs(collection(db, "dictionary"));
+    //     query.forEach((doc) =>
+    //         console.log(doc.id, doc.data())
+    //     )                                       //firestore에서 redux로 데이터 가져온 다음 여기서 불러서 뷰에 보여주기
+
+    //     const docRef = doc(db, "dictionary", "dR2jtENkATWXG6TWZ2KO"); // (firebase, "collection", "collectionID")
+    //      //firebase에 업데이트하기
+    //     // updateDoc(docRef, {done: true});
+        
+    //     //firebase에서 삭제하기
+    //     //deleteDoc(docRef);
+    // }, [])
 
 const Wrap = styled.div`
     background-color: #0492C2;
@@ -103,7 +103,6 @@ const Buttons = styled.button`
     background-color: transparent;   
 
 `
-
 const Card = styled.div`
     width: 350px;
     min-height: 200px;
@@ -117,7 +116,6 @@ const Card = styled.div`
     background-color: ${(props)=> (props.done ? "#0090bd7d" : "transparent")}
 
 `
-
 const InnerTitle = styled.h5`
     color: grey;
     text-decoration: underline;

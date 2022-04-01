@@ -1,49 +1,36 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 // import { editWord } from "./redux/modules/dictionary";
 import Button from '@material-ui/core/Button';
-import { db } from "./firebase";
-import { collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc } from 'firebase/firestore'
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { editWordFB } from "./redux/modules/dictionary";
 
 
 const EditWord = (props) => {
     //props로 받은 데이터에서 뭘 수정할 건지.
     const history = useHistory();
-
     const params = useParams();
-    
+    const dispatch = useDispatch();
+
+    const index = params.id;
     const dictionary_list = useSelector((state) => state.dictionary.list);
 
-    // useEffect(async()=>{  // async 비동기 await : 기다렸다가 나오면 값 줘~ 
-        
-    //     // firebase db 불러오기
-    //     // const query = await getDocs(collection(db, "dictionary"));
-    //     // query.forEach((doc) =>
-    //     //     console.log(doc.id, doc.data())
-    //     // )                                       //firestore에서 redux로 데이터 가져온 다음 여기서 불러서 뷰에 보여주기
+    const word = useRef("");
+    const desc = useRef("");
+    const example = useRef("");
 
-    //     // const docRef = doc(db, "dictionary", "dR2jtENkATWXG6TWZ2KO"); // (firebase, "collection", "collectionID")
-    //      //firebase에 업데이트하기
-    //     // updateDoc(docRef, {done: true});
-        
-    // }, [])
-
-    console.log(dictionary_list);
-    dictionary_list.map((x, index) => {
-        if( dictionary_list.id === params){
-            return x;
-        }
-    }) 
-    const word = useRef(null);
-    const desc = useRef(null);
-    const example = useRef(null);
-
-    const dispatch = useDispatch;
-    // dispatch(editWord())
+    const editWord = () => {
+        dispatch(
+            editWordFB({
+                word: word.current.value,
+                desc: desc.current.value,
+                example: example.current.value,
+                id: dictionary_list[index].id,
+            })
+        );
+        history.goBack();
+    }
 
     return (
         <Wrap>
@@ -52,16 +39,20 @@ const EditWord = (props) => {
                     <h3>단어 수정하기</h3>
                     <AddDetail>
                         <form>
-                            <p>WORD <Input required placeholder="단어" ref={word} value="sdf" onChange={() => {console.log(word.current.value)}}/></p> {/* props.word */}
-                            <p>DESCRIPTION <Input required placeholder="설명" value="ddf" ref={desc}/></p>   {/* props.desc */}
-                            <p>EXAMPLE <Input placeholder="예문" ref={example} value="df"/></p>  {/* props.example */}
+                            <p>WORD <Input required placeholder="단어" 
+                            ref = {word} 
+                            defaultValue = {dictionary_list[index].word} /></p> 
+                            <p>DESCRIPTION <Input required placeholder="설명" 
+                            defaultValue={dictionary_list[index].desc} 
+                            ref={desc}/></p> 
+                            <p>EXAMPLE <Input placeholder="예문" 
+                            ref={example} 
+                            defaultValue={dictionary_list[index].example} /></p>  
                         </form>
                     </AddDetail>
-                    <Button onClick={() => { history.push("/")}} 
+                    <Button onClick={editWord} 
                             variant="outlined"
                             style={{margin: "20px auto 5px auto", display: "block", border: "1px solid rgb(25, 118, 210)"}}>Edit</Button>
-
-      
                 </AddWrap>
             </DictWrap>
         </Wrap>
