@@ -5,21 +5,26 @@ import { useDispatch } from "react-redux";
 import { addWordFB } from "./redux/modules/dictionary";
 import { useRef } from "react";
 import Button from '@material-ui/core/Button';
-import { collection, doc, getDoc, getDocs, addDoc} from 'firebase/firestore'
-
 
 const AddWord = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
     
-    const word = useRef(null);
-    const desc = useRef(null);
-    const example = useRef(null);
+    const word = useRef("");
+    const desc = useRef("");
+    const example = useRef("");
 
-    // const addWord = () => {
-    //     //firebase에 추가하기
-    //     // addDoc(collection(db, "dictionary"), {word: "fiancé", desc: "약혼자", example: "le fiancé de Isabel", done: false})
-    // }
+    const addWord = () => {
+        //firebase에 추가하기
+        // addDoc(collection(db, "dictionary"), {word: "fiancé", desc: "약혼자", example: "le fiancé de Isabel", done: false})
+        dispatch(addWordFB({
+            word: word.current.value,
+            desc: desc.current.value,
+            example: example.current.valeu,
+            done: false,
+        }));
+        history.goBack();
+    }
 
     return (
         <Wrap>
@@ -27,11 +32,11 @@ const AddWord = (props) => {
                 <AddWrap>
                     <h3>단어 추가하기</h3>
                     <AddDetail>
-                            <p>WORD <Input required placeholder="단어" ref={word}/></p>
+                            <p>WORD <Input required placeholder="단어" ref={word} /></p>
                             <p>DESCRIPTION <Input required placeholder="설명" ref={desc}/></p>
                             <p>EXAMPLE <Input placeholder="예문" ref={example}/></p>
                     </AddDetail>
-                    <Button onClick={() => {dispatch(addWordFB(word.current.value, desc.current.value, example.current.value));history.push("/")}} 
+                    <Button onClick={addWord} 
                             variant="outlined"
                             style={{margin: "20px auto 5px auto", display: "block", border: "1px solid rgb(25, 118, 210)"}}>Add</Button>
                 </AddWrap>
