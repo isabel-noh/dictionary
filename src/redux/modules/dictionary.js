@@ -1,5 +1,5 @@
 import { db } from "../../firebase";
-import { collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, setDoc } from 'firebase/firestore'
 
 //Action
 const LOAD = "dictionary/LOAD"; 
@@ -41,7 +41,6 @@ export function editWord(word){
 export const loadDictFB = () => {
     return async function (dispatch) { // Firebase는 비동기통신으로 정보를 주기 때문에 async 붙여줌
         const dictionary_data = await getDocs(collection(db, "dictionary"));  // async랑 await 짝꿍
-
         let dict_list = [];
         dictionary_data.forEach((x) => {
             dict_list.push({id: x.id, ...x.data()});
@@ -53,7 +52,6 @@ export const addWordFB = (word) => {
     return async function (dispatch) {
         const docRef = await addDoc(collection(db, "dictionary"), word);
         const _word = {id: docRef.id, ...word};
-
         dispatch(addWord(_word));
     };
 };
@@ -80,7 +78,7 @@ export const undoWordFB = (word_id) => {
 };
 export const editWordFB = (word) => {
     return async function (dispatch, getState) {
-        const docRef = doc(db, "dictionary", word);
+        const docRef = doc(db, "dictionary", word.id);
         await updateDoc(docRef, {
             id: word.id, 
             done: false, 
@@ -92,7 +90,6 @@ export const editWordFB = (word) => {
     };  
 };
 
-
 //Reducer
 export default function reducer(state = initialState, action = {} ){
     switch (action.type) {
@@ -102,7 +99,7 @@ export default function reducer(state = initialState, action = {} ){
         // ADD
         case "dictionary/ADD": {
             const new_word_list = [
-                ...state.list, {
+                {
                     id: action.word.id, 
                     done: false, 
                     word: action.word.word, 
@@ -110,7 +107,8 @@ export default function reducer(state = initialState, action = {} ){
                     example: action.word.example,
                 }
             ];
-            return {list: new_word_list};
+            const new_list = [...state.list, new_word_list];
+            return {list: new_list};
         }
         case "dictionary/DELETE":{
             const new_word_list = state.list.filter((x, idx)=>{
@@ -137,6 +135,7 @@ export default function reducer(state = initialState, action = {} ){
             return {list: new_word_list};
         }
         //단어장 수정
+        //새로고침시 수정은 되는데 새로고침하기 전에 카드가 하나 더 생겼다가 새로고침하면 사라짐
         case "dictionary/EDIT": {
             const new_word_list = state.list.map((l, idx) => {
                 if(action.word.id === l.id){

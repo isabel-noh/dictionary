@@ -72,7 +72,9 @@ const Main = () => {
     //     query.forEach((doc) =>
     //         console.log(doc.id, doc.data())
     //     )                                       //firestore에서 redux로 데이터 가져온 다음 여기서 불러서 뷰에 보여주기
-
+     //firebase에 추가하기
+        // addDoc(collection(db, "dictionary"), {word: "fiancé", desc: "약혼자", example: "le fiancé de Isabel", done: false})
+    
     //     const docRef = doc(db, "dictionary", "dR2jtENkATWXG6TWZ2KO"); // (firebase, "collection", "collectionID")
     //      //firebase에 업데이트하기
     //     // updateDoc(docRef, {done: true});
