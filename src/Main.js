@@ -2,9 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useSelector, useDispatch }from 'react-redux';
-import { deleteWord,doneWord } from "./redux/modules/dictionary";
-import { useEffect } from "react";
-import { loadDictFB } from "./redux/modules/dictionary";
+import { deleteWordFB, doneWordFB, undoWordFB } from "./redux/modules/dictionary";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CheckIcon from '@mui/icons-material/Check';
 import EditIcon from '@mui/icons-material/Edit';
@@ -17,7 +15,17 @@ const Main = () => {
     //store에서 정보 불러오기
     const dictionary_list = useSelector((state) => state.dictionary.list);
 
+    const deleteWord = (idx) => {
+        dispatch(deleteWordFB(dictionary_list[idx].id));
+    }
 
+    const doneWord = (idx) => {
+        dispatch(doneWordFB(dictionary_list[idx].id));
+    }
+
+    const undoWord = (idx) => {
+        dispatch(undoWordFB(dictionary_list[idx].id));
+    }
     // useEffect(async()=>{  // async 비동기 await : 기다렸다가 나오면 값 줘~ 
     //     console.log(db);
     //     // firebase db 불러오기
@@ -43,12 +51,12 @@ const Main = () => {
                         return(
                             <Card key={idx} done={word.done}>
                                 <div className="buttonBox" style={{float:"right"}}>
-                                    <Buttons onClick={() => {dispatch(doneWord(idx));}}><CheckIcon/></Buttons>
+                                    <Buttons onClick={() => word.done === false ? doneWord(idx) : undoWord(idx)}><CheckIcon/></Buttons>
                                     {/* 버튼>state를 props로 보내줘야돼 */}
                                     {/*query parameeter */}
                                     {/*find index */}
                                     <Buttons onClick={() => history.push("/editword/"+word.id)}><EditIcon /></Buttons>  
-                                    <Buttons onClick={() => {dispatch(deleteWord(idx))}}><DeleteForeverIcon /></Buttons>
+                                    <Buttons onClick={() => deleteWord(idx)}><DeleteForeverIcon /></Buttons>
                                 </div>
                                 <div className="WordWrap">
                                     <InnerTitle>단어</InnerTitle>
